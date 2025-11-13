@@ -11,6 +11,7 @@ const dotenv = require("dotenv");
 const scanRoutes = require("./routes/scan");
 const multer = require("multer");
 const axios = require("axios");
+const chatbotRoutes = require("./routes/chatbot");
 // =============================
 
 //============================
@@ -153,3 +154,5 @@ console.log(
   "VirusTotal Key:",
   process.env.VIRUSTOTAL_API_KEY ? "✅ Loaded" : "❌ Missing"
 );
+//=======================
+app.use("/api/chatbot", chatbotRoutes);

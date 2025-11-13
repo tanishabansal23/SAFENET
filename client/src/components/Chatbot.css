@@ -1,0 +1,89 @@
+/* Chatbot.css */
+
+/* === SCOPED ONLY TO CHATBOT PAGE === */
+.chatbot-page h1 {
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.7),
+    0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.chatbot-page ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatbot-page ::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 10px;
+}
+
+.chatbot-page ::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border-radius: 10px;
+}
+
+.chatbot-page ::-webkit-scrollbar-thumb:hover {
+  background: #22d3ee;
+}
+
+/* Chat bubbles animation */
+.chatbot-page .user-bubble,
+.chatbot-page .bot-bubble {
+  animation: fadeInUp 0.3s ease both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input and button smooth hover */
+.chatbot-page input:focus {
+  box-shadow: 0 0 8px #06b6d4;
+  transition: 0.2s ease-in-out;
+}
+
+.chatbot-page button {
+  transition: all 0.2s ease-in-out;
+}
+
+.chatbot-page button:hover {
+  box-shadow: 0 0 10px #06b6d4;
+  transform: scale(1.05);
+}
+
+/* Chat container glow */
+.chatbot-page .chatbot-container {
+  background-color: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25);
+}
+.chatbot-page .chatbot-messages h2 {
+  color: #22d3ee;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.chatbot-page .chatbot-messages h3 {
+  color: #0ea5e9;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.chatbot-page .chatbot-messages p {
+  color: #e0f2fe;
+  margin-bottom: 6px;
+}
+
+.chatbot-page .chatbot-messages ul {
+  list-style: disc;
+  margin-left: 1.5rem;
+}
+
+.chatbot-page .chatbot-messages li {
+  margin-bottom: 4px;
+}

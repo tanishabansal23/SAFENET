@@ -7,6 +7,7 @@ import MainHome from "./mainHome";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import MalwareScanner from "./components/MalwareScanner/MalwareScanner";
+import Chatbot from "./components/Chatbot";
 
 // import Profile from "./Profile";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -24,6 +25,7 @@ function App() {
           element={<ResetPassword />}
         ></Route>
         <Route path="/scanner" element={<MalwareScanner />} />
+        <Route path="/chatbot" element={<Chatbot />} />
         {/* <Route path="/profile" element={<Profile />} /> */}
       </Routes>
     </BrowserRouter>
