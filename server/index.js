@@ -101,7 +101,7 @@ app.post("/forgot-password", (req, res) => {
 
     let mailOptions = {
       from: process.env.EMAIL_USER,
-      to: "add your mail",
+      to: "tanisha.23.bansal@gmail.com",
       subject: "Reset your password",
       text: `http://localhost:5173/reset-password/${user._id}/${token}`,
     };

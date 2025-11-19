@@ -1,19 +1,20 @@
-import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Signup from "./Signup";
 import Login from "./Login";
 import Home from "./Home";
-import MainHome from "./mainHome";
+import MainHome from "./MainHome";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import MalwareScanner from "./components/MalwareScanner/MalwareScanner";
 import Chatbot from "./components/Chatbot";
-
-// import Profile from "./Profile";
+import FileUpload from "./components/FileUpload";
+import { ToastProvider } from "./components/Toast";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 function App() {
   return (
-    <BrowserRouter>
+    <ToastProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainHome />}></Route>
         <Route path="/register" element={<Signup />}></Route>
@@ -26,9 +27,10 @@ function App() {
         ></Route>
         <Route path="/scanner" element={<MalwareScanner />} />
         <Route path="/chatbot" element={<Chatbot />} />
-        {/* <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/upload" element={<FileUpload />} />
       </Routes>
     </BrowserRouter>
+    </ToastProvider>
   );
 }
 
