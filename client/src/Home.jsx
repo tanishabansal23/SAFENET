@@ -17,7 +17,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/home")
+      .get("/home")
       .then((result) => {
         console.log(result);
         if (result.data !== "Success") {

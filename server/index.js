@@ -12,6 +12,8 @@ const scanRoutes = require("./routes/scan");
 const multer = require("multer");
 const axios = require("axios");
 const chatbotRoutes = require("./routes/chatbot");
+const FormData = require("form-data");
+const fs = require("fs");
 // =============================
 
 //============================
@@ -143,6 +145,60 @@ app.post("/logout", (req, res) => {
   res.clearCookie("token");
   res.json({ Status: "Logged out successfully" });
 });
+
+//==================================================File Upload Proxy======
+// Proxy route to forward file uploads to teammate's ngrok API
+app.post("/api/files", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const formData = new FormData();
+    
+    // Read the uploaded file and append to form data
+    formData.append("file", fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+
+    // Get ngrok URL from environment variable
+    const NGROK_URL = process.env.NGROK_FILE_UPLOAD_URL || "http://localhost:5000";
+    
+    console.log(`Forwarding file upload to: ${NGROK_URL}/api/files/`);
+    
+    const response = await axios.post(`${NGROK_URL}/api/files/`, formData, {
+      headers: {
+        ...formData.getHeaders(),
+      },
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
+    });
+
+    // Clean up the temporary file
+    fs.unlinkSync(req.file.path);
+
+    console.log("File upload successful");
+    res.json(response.data);
+  } catch (error) {
+    console.error("File upload proxy error:", error.message);
+    
+    // Clean up the temporary file on error
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (cleanupError) {
+        console.error("Error cleaning up file:", cleanupError);
+      }
+    }
+    
+    res.status(500).json({ 
+      error: "File upload failed", 
+      details: error.response?.data || error.message 
+    });
+  }
+});
+
 //==================================================Malware======
 app.use("/api", scanRoutes);
 

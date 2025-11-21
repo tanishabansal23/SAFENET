@@ -14,7 +14,7 @@ function Chatbot() {
     setMessages([...messages, newMessage]);
 
     try {
-      const res = await axios.post("http://localhost:3001/api/chatbot", {
+      const res = await axios.post("/api/chatbot", {
         message: input,
       });
       const aiReply = res.data.reply;

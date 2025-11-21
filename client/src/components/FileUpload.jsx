@@ -26,14 +26,46 @@ const FileUpload = () => {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/files/", {
+      // Use specific file upload API from environment variable
+      const FILE_UPLOAD_API =
+        import.meta.env.VITE_FILE_UPLOAD_API ||
+        "http://localhost:3001/api/files";
+      
+      console.log("Uploading to:", `${FILE_UPLOAD_API}/api/files/`);
+      
+      const res = await fetch(`${FILE_UPLOAD_API}/api/files/`, {
         method: "POST",
         body: formData,
+        // Don't set Content-Type header - browser will set it with boundary for multipart/form-data
       });
 
       const uploadTime = new Date().toLocaleString();
 
-      if (res.ok) {
+      // Log response for debugging
+      console.log("Upload response status:", res.status);
+      console.log("Upload response ok:", res.ok);
+
+      // Clone response to read it multiple times if needed
+      const resClone = res.clone();
+      let responseData = null;
+
+      try {
+        // Try to parse as JSON
+        responseData = await res.json();
+        console.log("Upload response data:", responseData);
+      } catch (err) {
+        // If JSON parsing fails, try text
+        try {
+          responseData = await resClone.text();
+          console.log("Upload response text:", responseData);
+        } catch (textErr) {
+          console.log("Could not parse response");
+        }
+      }
+
+      // Consider status codes 200-299 as success
+      // Also check if file actually uploaded (your teammate confirms it's in S3)
+      if (res.status >= 200 && res.status < 300) {
         showAlert("You have successfully uploaded the file!", "success");
         setHistory((prev) => [
           {
@@ -44,19 +76,26 @@ const FileUpload = () => {
           ...prev,
         ]);
         setFile(null);
+        // Clear the file input
+        document.querySelector(".file-input").value = "";
       } else {
-        showAlert("Upload failed. Try again.", "error");
+        // Show error with status code
+        const errorMsg =
+          responseData?.message ||
+          responseData?.error ||
+          `Upload failed with status ${res.status}`;
+        showAlert(errorMsg, "error");
         setHistory((prev) => [
           {
             name: file.name,
-            status: "Upload failed",
+            status: `Upload failed: ${res.status}`,
             time: uploadTime,
           },
           ...prev,
         ]);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Upload error:", error);
       showAlert("Server error. Try again later.", "error");
       setHistory((prev) => [
         {

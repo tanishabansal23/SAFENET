@@ -30,7 +30,7 @@ function ResetPassword() {
     }
 
     axios
-      .post(`http://localhost:3001/reset-password/${id}/${token}`, { password })
+      .post(`/reset-password/${id}/${token}`, { password })
       .then((result) => {
         console.log(result);
         if (result.data.Status === "Success") {
